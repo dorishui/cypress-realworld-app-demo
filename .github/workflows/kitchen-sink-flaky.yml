@@ -1,0 +1,31 @@
+name: Kitchen Sink Flaky Demo
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - ".github/workflows/kitchen-sink-flaky.yml"
+      - "cypress/demo/kitchen-sink-flaky.spec.ts"
+      - "cypress.kitchen-sink.config.ts"
+  push:
+    paths:
+      - ".github/workflows/kitchen-sink-flaky.yml"
+      - "cypress/demo/kitchen-sink-flaky.spec.ts"
+      - "cypress.kitchen-sink.config.ts"
+
+jobs:
+  cypress:
+    name: Kitchen Sink
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # A failed Cypress run exits non-zero and fails this job.
+      - name: Run Kitchen Sink demo
+        uses: cypress-io/github-action@v7
+        with:
+          browser: chrome
+          spec: cypress/demo/kitchen-sink-flaky.spec.ts
+          config-file: cypress.kitchen-sink.config.ts
